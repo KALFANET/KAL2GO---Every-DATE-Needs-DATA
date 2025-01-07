@@ -1,0 +1,30 @@
+.packages-container {
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+    text-align: center;
+}
+
+.packages-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.package-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 300px;
+    text-align: left;
+    background-color: #f9f9f9;
+}
+
+.package-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.package-card p {
+    margin: 5px 0;
+}

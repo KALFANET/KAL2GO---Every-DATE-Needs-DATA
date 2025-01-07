@@ -1,13 +1,24 @@
-// index.js
-// הקובץ הראשי שמפעיל את השרת
+require('dotenv').config(); // טעינת משתנים מקובץ .env
+const app = require('./src/app'); // ייבוא אפליקציית Express
+const sequelize = require('./src/config/db'); // ייבוא חיבור למסד הנתונים
+const PORT = process.env.PORT || 3000; // הגדרת הפורט להפעלת השרת
 
-// ייבוא האפליקציה הראשית מ-src/app
-const app = require('./src/app');
+(async () => {
+    try {
+        // בדיקת החיבור למסד הנתונים
+        await sequelize.authenticate();
+        console.log('Connected to the database successfully.');
 
-// הגדרת הפורט שעליו השרת יאזין (מוגדר ב-.env או ברירת מחדל ל-3000)
-const PORT = process.env.PORT || 3000;
+        // סנכרון הטבלאות במסד הנתונים
+        await sequelize.sync({ alter: true });
+        console.log('Database synchronized.');
 
-// הפעלת השרת והדפסת הודעה למסוף
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+        // הפעלת השרת
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+        process.exit(1); // יציאה מהתהליך אם יש שגיאה קריטית
+    }
+})();

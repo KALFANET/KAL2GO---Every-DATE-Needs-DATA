@@ -1,0 +1,29 @@
+.product-container {
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+    text-align: center;
+}
+
+.product-container h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.product-container p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.buy-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.buy-button:hover {
+    background-color: #218838;
+}
