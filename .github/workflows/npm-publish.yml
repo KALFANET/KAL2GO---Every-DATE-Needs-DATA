@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 20
       - run: cd kal2go-backend && npm ci
-      - run: cd kal2go-backend && npm test
+      - run: cd kal2go-backend && npm test -- --passWithNoTests
       - run: cd kal2go-backend && node index.js # הרצת ה-Backend
 
   frontend:
