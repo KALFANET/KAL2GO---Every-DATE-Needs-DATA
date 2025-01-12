@@ -7,7 +7,7 @@ const sequelize = new Sequelize(
     process.env.DB_USER, // שם המשתמש
     process.env.DB_PASSWORD, // סיסמת המשתמש
     {
-        host: process.env.DB_HOST || 'localhost', // כתובת השרת
+        host: process.env.DB_HOST || 'kal2go-db.c0lm4fgzdcad.us-east-1.rds.amazonaws.com', // כתובת השרת
         dialect: 'mariadb', // דיאלקט
         port: process.env.DB_PORT || 3306, // פורט
         dialectOptions: {
@@ -15,5 +15,15 @@ const sequelize = new Sequelize(
         },
     }
 );
+/ פונקציה לבדיקה האם החיבור תקין
+(async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection to the database has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+})();
+
 
 module.exports = sequelize; // ייצוא החיבור
