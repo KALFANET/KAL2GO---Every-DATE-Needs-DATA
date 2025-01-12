@@ -1,9 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // יבוא useNavigate
+import { FaGlobe, FaBolt, FaPiggyBank } from "react-icons/fa";
 import "../styles/Home.css";
 
 const Home = () => {
-    const navigate = useNavigate(); // הוספת פונקציית ניווט
+    const navigate = useNavigate(); // הגדרת הניווט
 
     const handleExplorePackages = () => {
         navigate("/packages"); // ניווט לעמוד חבילות
@@ -11,28 +12,31 @@ const Home = () => {
 
     return (
         <div className="home-container">
-            <header className="hero-section">
+            <section className="hero-section">
                 <h1>ברוכים הבאים ל-KAL2GO</h1>
-                <p>חבילות eSIM משתלמות לכל יעד בעולם.</p>
+                <p>משלמות יעד לכל העולם עם כרטיסי eSIM.</p>
                 <button className="cta-button" onClick={handleExplorePackages}>
-                    גלה חבילות
+                    גלה את החבילות
                 </button>
-            </header>
+            </section>
 
             <section className="features-section">
                 <h2>למה לבחור בנו?</h2>
                 <div className="features">
                     <div className="feature">
-                        <img src="/images/global.svg" alt="גלובלי" />
-                        <p>כיסוי גלובלי</p>
+                        <FaGlobe size={50} color="#007bff" />
+                        <h3>גלובלי</h3>
+                        <p>כיסוי גלובלי לכל היעדים בעולם</p>
                     </div>
                     <div className="feature">
-                        <img src="/images/instant.svg" alt="מיידי" />
-                        <p>הפעלה מיידית</p>
+                        <FaBolt size={50} color="#007bff" />
+                        <h3>מידי</h3>
+                        <p>הפעלה מידית ללא המתנה</p>
                     </div>
                     <div className="feature">
-                        <img src="/images/saving.svg" alt="חיסכון" />
-                        <p>חיסכון בעלויות נדידה</p>
+                        <FaPiggyBank size={50} color="#007bff" />
+                        <h3>חיסכון</h3>
+                        <p>חיסכון בעלויות לעומת חבילות סלולר רגילות</p>
                     </div>
                 </div>
             </section>

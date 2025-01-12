@@ -1,0 +1,52 @@
+/* תפריט ניווט */
+.navbar {
+    display: flex;
+    justify-content: center; /* מרכז את כל התפריט */
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #007bff; /* רקע כחול */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* הוספת צל */
+    position: sticky; /* שומר על התפריט למעלה */
+    top: 0;
+    z-index: 1000;
+    direction: rtl; /* תמיכה בעברית */
+}
+
+/* רשימת קישורים */
+.navbar-links {
+    list-style: none;
+    display: flex; /* מסדר את הקישורים בשורה אחת */
+    gap: 30px; /* רווחים בין הקישורים */
+    padding: 0;
+    margin: 0;
+}
+
+/* קישורים */
+.navbar-links li {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none; /* ללא קו תחתון */
+    transition: color 0.3s ease, border-bottom 0.3s ease; /* מעבר צבע וקו */
+    padding-bottom: 5px; /* מרווח תחתון לקו */
+}
+
+.navbar-links a:hover {
+    color: #ffdd57; /* צבע צהוב בעת ריחוף */
+    border-bottom: 2px solid #ffdd57; /* קו תחתון בעת ריחוף */
+}
+
+/* רספונסיביות למסכים קטנים */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column; /* מסדר את הקישורים אחד מתחת לשני */
+    }
+
+    .navbar-links {
+        flex-direction: column; /* מסדר את הקישורים בעמודה */
+        gap: 15px; /* רווחים קטנים יותר */
+    }
+}
