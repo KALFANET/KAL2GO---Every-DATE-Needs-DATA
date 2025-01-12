@@ -7,11 +7,14 @@ const sequelize = new Sequelize(
     process.env.DB_USER, // שם המשתמש
     process.env.DB_PASSWORD, // סיסמת המשתמש
     {
-        host: process.env.DB_HOST || 'kal2go-db.c0lm4fgzdcad.us-east-1.rds.amazonaws.com', // כתובת השרת
+        host: process.env.DB_HOST,
         dialect: 'mariadb', // דיאלקט
         port: process.env.DB_PORT || 3306, // פורט
         dialectOptions: {
             allowPublicKeyRetrieval: true, // הגדרה לעקיפת בעיות אישור ציבורי
+        },
+        pool: {
+            acquire: 30000, // הגדלת משך הזמן של ה-timeout
         },
     }
 );
