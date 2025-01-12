@@ -12,7 +12,7 @@ host: process.env.DB_HOST || "kal2go-db.c0lm4fgzdcad.us-east-1.rds.amazonaws.com
         logging: false, // לבטל לוגים (אופציונלי)
         dialectOptions: {
             allowPublicKeyRetrieval: true, // אישור מפתח ציבורי
-            connectTimeout: 100000, // זמן קצוב להתחברות
+            connectTimeout: 20000, // זמן קצוב להתחברות
         },
         pool: {
             max: 5, // מספר חיבורים מקסימלי
