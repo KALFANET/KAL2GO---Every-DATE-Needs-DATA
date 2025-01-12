@@ -15,7 +15,7 @@ const sequelize = new Sequelize(
         },
     }
 );
-/ פונקציה לבדיקה האם החיבור תקין
+// פונקציה לבדיקה האם החיבור תקין
 (async () => {
     try {
         await sequelize.authenticate();
