@@ -1,32 +1,36 @@
-require('dotenv').config();
 const { Sequelize } = require('sequelize');
 
 // יצירת חיבור למסד הנתונים
 const sequelize = new Sequelize(
-    process.env.DB_NAME, // שם מסד הנתונים
-    process.env.DB_USER, // שם המשתמש
-    process.env.DB_PASSWORD, // סיסמת המשתמש
+    'kal2go_db', // שם מסד הנתונים
+    'admin', // שם המשתמש
+    '13579Net!!', // סיסמת המשתמש
     {
-        host: process.env.DB_HOST,
+host: process.env.DB_HOST || "kal2go-db.c0lm4fgzdcad.us-east-1.rds.amazonaws.com",
         dialect: 'mariadb', // דיאלקט
-        port: process.env.DB_PORT || 3306, // פורט
+        port: 3306, // פורט
+        logging: false, // לבטל לוגים (אופציונלי)
         dialectOptions: {
-            allowPublicKeyRetrieval: true, // הגדרה לעקיפת בעיות אישור ציבורי
+            allowPublicKeyRetrieval: true, // אישור מפתח ציבורי
+            connectTimeout: 100000, // זמן קצוב להתחברות
         },
         pool: {
-            acquire: 30000, // הגדלת משך הזמן של ה-timeout
+            max: 5, // מספר חיבורים מקסימלי
+            min: 0, // מספר חיבורים מינימלי
+            idle: 10000, // זמן המתנה לחיבור פנוי
         },
     }
 );
-// פונקציה לבדיקה האם החיבור תקין
+
+// בדיקת חיבור למסד הנתונים
 (async () => {
     try {
         await sequelize.authenticate();
-        console.log('Connection to the database has been established successfully.');
+        console.log('החיבור למסד הנתונים בוצע בהצלחה!');
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
+        console.error('שגיאה בחיבור למסד הנתונים:', error.message);
     }
 })();
 
+module.exports = sequelize;
 
-module.exports = sequelize; // ייצוא החיבור
