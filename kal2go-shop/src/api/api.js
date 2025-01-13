@@ -1,15 +1,20 @@
 import axios from 'axios';
 
 // יצירת ה-API_BASE_URL בצורה דינמית
-const API_BASE_URL = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/api/packages`;
 
 // פונקציה לקבלת החבילות
-export const getPackages = async () => {
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000/api';
+
+// פונקציה להבאת חבילות
+export const fetchPackages = async () => {
     try {
-        const response = await axios.get(API_BASE_URL);
-        return response.data;
+        const response = await fetch(`${API_BASE_URL}/packages`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch packages: ${response.status}`);
+        }
+        return await response.json();
     } catch (error) {
-        console.error("Error fetching packages from API:", error);
+        console.error('Error fetching packages:', error);
         throw error;
     }
 };

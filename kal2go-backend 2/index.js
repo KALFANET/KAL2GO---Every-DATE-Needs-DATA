@@ -1,7 +1,16 @@
-require('dotenv').config(); // טעינת משתנים מקובץ .env
-const app = require('./src/app'); // ייבוא אפליקציית Express
-const sequelize = require('./src/config/db'); // ייבוא חיבור למסד הנתונים
-const PORT = process.env.PORT || 3000; // הגדרת הפורט להפעלת השרת
+require('dotenv').config(); // טעינת משתני סביבה
+const express = require('express');
+const cors = require('cors');
+const app = require('./src/app'); // אפליקציה של Express
+const sequelize = require('./src/config/db'); // חיבור למסד הנתונים
+const PORT = process.env.PORT || 3000; // הפורט של השרת
+
+// הגדרות CORS
+app.use(cors({
+    origin: 'http://localhost:3001', // ה-Frontend רץ על פורט 3001
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 (async () => {
     try {
@@ -9,7 +18,7 @@ const PORT = process.env.PORT || 3000; // הגדרת הפורט להפעלת ה�
         await sequelize.authenticate();
         console.log('Connected to the database successfully.');
 
-        // סנכרון הטבלאות במסד הנתונים
+        // סנכרון הטבלאות
         await sequelize.sync({ alter: true });
         console.log('Database synchronized.');
 
@@ -19,6 +28,6 @@ const PORT = process.env.PORT || 3000; // הגדרת הפורט להפעלת ה�
         });
     } catch (error) {
         console.error('Unable to connect to the database:', error);
-        process.exit(1); // יציאה מהתהליך אם יש שגיאה קריטית
+        process.exit(1);
     }
 })();

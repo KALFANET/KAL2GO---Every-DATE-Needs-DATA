@@ -9,7 +9,7 @@ const Product = () => {
     const [product, setProduct] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/packages/${id}`)
+        axios.get(`http://localhost:3001/api/packages/${id}`)
             .then(response => setProduct(response.data))
             .catch(error => console.error("Error fetching product:", error));
     }, [id]);

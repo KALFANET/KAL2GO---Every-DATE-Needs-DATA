@@ -1,61 +1,68 @@
-import React, { useState, useEffect } from "react";
-import { getPackages, syncPackages } from "../api/api";
+import React, { useEffect, useState } from "react";
+import { fetchPackages } from "../api/api";
+import "../styles/PackagesPage.css";
 
-function PackagesPage() {
+const PackagesPage = () => {
     const [packages, setPackages] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
 
-    // שליפת החבילות בעת טעינת העמוד
     useEffect(() => {
         const loadPackages = async () => {
-            try {
-                setLoading(true);
-                const packagesData = await fetchPackages();
-                setPackages(packagesData);
-            } catch (err) {
-                setError("Failed to fetch packages.");
-            } finally {
-                setLoading(false);
-            }
+            const data = await fetchPackages();
+            setPackages(data);
         };
-
         loadPackages();
     }, []);
 
-    // תפעול סנכרון חבילות
-    const handleSyncPackages = async () => {
-        try {
-            setLoading(true);
-            await syncPackages();
-            const packagesData = await getPackages(); // שליפת החבילות שוב לאחר סנכרון
-            setPackages(packagesData);
-            alert("Packages synced successfully.");
-        } catch (err) {
-            setError("Failed to sync packages.");
-        } finally {
-            setLoading(false);
-        }
+    const calculatePrice = (price) => {
+        const basePrice = price / 10000; // המרה לדולרים
+        const fee = 0.30; // עמלה
+        return (basePrice + fee).toFixed(2);
     };
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
+    const filteredPackages = packages.filter(
+        (pkg) =>
+            pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            pkg.location.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
-        <div>
+        <div className="packages-container">
             <h1>Available Packages</h1>
-            <button onClick={handleSyncPackages}>Sync Packages</button>
-            <ul>
-                {packages.map((pkg) => (
-                    <li key={pkg.id}>
-                        <h3>{pkg.name}</h3>
-                        <p>{pkg.description}</p>
-                        <p>Price: ${pkg.price.toFixed(2)}</p>
-                    </li>
-                ))}
-            </ul>
+            <input
+                type="text"
+                placeholder="Search by Name or Region"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Data</th>
+                        <th>Duration</th>
+                        <th>Speed</th>
+                        <th>Region</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredPackages.map((pkg) => (
+                        <tr key={pkg.packageCode}>
+                            <td>{pkg.name}</td>
+                            <td>${calculatePrice(pkg.price)}</td>
+                            <td>{(pkg.volume / 1048576).toFixed(2)} GB</td>
+                            <td>
+                                {pkg.duration} {pkg.durationUnit}
+                            </td>
+                            <td>{pkg.speed}</td>
+                            <td>{pkg.location}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
-}
+};
 
 export default PackagesPage;
