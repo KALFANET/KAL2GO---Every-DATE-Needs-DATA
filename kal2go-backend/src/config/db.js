@@ -1,14 +1,15 @@
 const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
 // יצירת חיבור למסד הנתונים
 const sequelize = new Sequelize(
-    'kal2go_db', // שם מסד הנתונים
-    'admin', // שם המשתמש
-    '13579Net!!', // סיסמת המשתמש
+    process.env.DB_NAME, // שם מסד הנתונים
+    process.env.DB_USER, // שם המשתמש
+    process.env.DB_PASSWORD, // סיסמת המשתמש
     {
-host: process.env.DB_HOST || "kal2go-db.c0lm4fgzdcad.us-east-1.rds.amazonaws.com",
-        dialect: 'mariadb', // דיאלקט
-        port: 3306, // פורט
+        host: process.env.DB_HOST,
+        dialect: process.env.DB_DIALECT, // דיאלקט
+        port: process.env.DB_PORT,
         logging: false, // לבטל לוגים (אופציונלי)
         dialectOptions: {
             allowPublicKeyRetrieval: true, // אישור מפתח ציבורי
@@ -33,4 +34,3 @@ host: process.env.DB_HOST || "kal2go-db.c0lm4fgzdcad.us-east-1.rds.amazonaws.com
 })();
 
 module.exports = sequelize;
-
