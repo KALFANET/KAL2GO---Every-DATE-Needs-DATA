@@ -1,0 +1,43 @@
+.purchase-container {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 600px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.purchase-container h1 {
+    text-align: center;
+    color: #333;
+}
+
+.purchase-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.purchase-container input,
+.purchase-container select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.purchase-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.purchase-container button:hover {
+    background-color: #0056b3;
+}   

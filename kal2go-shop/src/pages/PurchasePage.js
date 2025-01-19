@@ -1,65 +1,96 @@
-import React, { useEffect, useState } from "react";
-import { fetchPackages } from "../api/api";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import '../styles/PurchasePage.css';
 
 function PurchasePage() {
-  const [packages, setPackages] = useState([]);
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const [error, setError] = useState(null);
+    const [packages, setPackages] = useState([]);
+    const [selectedPackage, setSelectedPackage] = useState(null);
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const loadPackages = async () => {
-      try {
-        const data = await fetchPackages();
-        setPackages(data);
-      } catch (err) {
-        setError("Failed to fetch packages.");
-      }
+    useEffect(() => {
+        const fetchPackages = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/packages`);
+                setPackages(response.data);
+            } catch (err) {
+                console.error('Error fetching packages:', err.message);
+            }
+        };
+
+        fetchPackages();
+    }, []);
+
+    const handlePurchase = async () => {
+        if (!selectedPackage || !email) {
+            setError('Please select a package and provide a valid email.');
+            return;
+        }
+
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/purchase`, {
+                productId: selectedPackage.id,
+                price: selectedPackage.price,
+                customerEmail: email,
+            });
+
+            if (response.data.checkoutUrl) {
+                window.location.href = response.data.checkoutUrl;
+            } else {
+                setError('Failed to create payment link.');
+            }
+        } catch (err) {
+            setError('Error processing payment. Please try again.');
+            console.error(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    loadPackages();
-  }, []);
-
-  const handlePurchase = () => {
-    if (!selectedPackage) {
-      alert("Please select a package");
-      return;
-    }
-
-    // הפעלת תשלום באמצעות Paddle
-    const checkout = window.Paddle.Checkout.open({
-      product: selectedPackage.paddleProductId,
-      successCallback: () => alert("Payment successful!"),
-      closeCallback: () => console.log("Payment window closed"),
-    });
-  };
-
-  return (
-    <div>
-      <h1>Purchase eSIM</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form>
-        <label>
-          Select Package:
-          <select
-            onChange={(e) =>
-              setSelectedPackage(packages.find((pkg) => pkg.packageCode === e.target.value))
-            }
-          >
-            <option value="">Select</option>
-            {packages.map((pkg) => (
-              <option key={pkg.id} value={pkg.packageCode}>
-                {pkg.name} - ${(pkg.price / 100).toFixed(2)}
-              </option>
-            ))}
-          </select>
-        </label>
-        <br />
-        <button type="button" onClick={handlePurchase}>
-          Pay with Paddle
-        </button>
-      </form>
-    </div>
-  );
+    return (
+        <div className="purchase-container">
+            <h1>Purchase eSIM</h1>
+            <label>
+                Email:
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                />
+            </label>
+            <label>
+                Select Package:
+                <select
+                    onChange={(e) => setSelectedPackage(JSON.parse(e.target.value))}
+                    defaultValue=""
+                >
+                    <option value="" disabled>
+                        Select a package
+                    </option>
+                    {packages.map((pkg) => (
+                        <option
+                            key={pkg.packageCode}
+                            value={JSON.stringify({
+                                id: pkg.packageCode,
+                                price: pkg.price / 10000 + 1.5,
+                            })}
+                        >
+                            {pkg.name} - ${pkg.price / 10000 + 1.5}
+                        </option>
+                    ))}
+                </select>
+            </label>
+            <button onClick={handlePurchase} disabled={loading}>
+                {loading ? 'Processing...' : 'Pay Now'}
+            </button>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+        </div>
+    );
 }
 
 export default PurchasePage;

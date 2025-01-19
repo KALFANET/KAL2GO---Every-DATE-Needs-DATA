@@ -1,24 +1,28 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors'); // ייבוא חבילת cors
-const userRoutes = require('./routes/userRoutes'); // נתיבי ה-API למשתמשים
-const packageRoutes = require('./routes/packageRoutes'); // נתיבי ה-API לחבילות
-const paymentRoutes = require('./routes/paymentRoutes'); // נתיבי ה-API לחבילות
+const cors = require('cors');
+const userRoutes = require('./routes/userRoutes');
+const packageRoutes = require('./routes/packageRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
-const app = express();
-// הגדרת // הגדרת CORS כדי לאפשר גישה מ-FrontendCORS כדי לאפשר גישה מ-Frontend
+const app = express(); // Changed to express()
+
+// Middleware
 app.use(cors({
-    origin: 'http://localhost:3001', // כתובת ה-Frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // סוגי הבקשות המותרות
-    credentials: true // אם יש צורך בשליחה של Cookies
+    origin: 'http://localhost:3001', // Frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true, // For cookies
 }));
+app.use(express.json());
 
+// Commenting out routes one by one:
+// Uncomment the routes one by one and test:
+app.use('/api/users', userRoutes);
+app.use('/api/packages', packageRoutes);
+app.use('/api/payments', paymentRoutes);
+
+// Default route
 app.get('/', (req, res) => {
     res.send('Welcome to the KAL2GO API!');
 });
 
-// נתיבים
-app.use('/api/users', userRoutes);
-app.use('/api/packages', packageRoutes);
-app.use('/api/payments', paymentRoutes);
 module.exports = app;

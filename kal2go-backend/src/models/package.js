@@ -15,30 +15,46 @@ const Package = sequelize.define('Package', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+            notEmpty: true, // ולידציה לשדה שאינו ריק
+        },
     },
     description: {
-        type: DataTypes.TEXT,  // שינוי ל-TEXT לתמיכה בתיאורים ארוכים
+        type: DataTypes.TEXT,  // TEXT לתמיכה בתיאורים ארוכים
         allowNull: true,
+        defaultValue: 'No description available', // ברירת מחדל
     },
     price: {
-        type: DataTypes.DECIMAL(10, 2),  // שינוי ל-DECIMAL לדיוק בנתונים כספיים
+        type: DataTypes.DECIMAL(10, 2),  // דיוק לנתונים כספיים
         allowNull: false,
         defaultValue: 0.00,
+        validate: {
+            min: 0, // מחיר חייב להיות חיובי
+        },
     },
     volume: {
         type: DataTypes.BIGINT,
         allowNull: false,
         defaultValue: 0,
+        validate: {
+            min: 0, // ולידציה - לא יכול להיות שלילי
+        },
     },
     duration: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
+        validate: {
+            min: 0, // ולידציה - לא יכול להיות שלילי
+        },
     },
     durationUnit: {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 'DAYS',
+        validate: {
+            isIn: [['DAYS', 'HOURS', 'MINUTES']], // הגבלת ערכים אפשריים
+        },
     },
     locationNetworkList: {
         type: DataTypes.JSON,
@@ -48,19 +64,26 @@ const Package = sequelize.define('Package', {
     speed: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: 'Unknown', // ברירת מחדל
     },
     status: {
         type: DataTypes.ENUM('active', 'inactive'),
         defaultValue: 'active',
     }
 }, {
-    timestamps: true,
+    timestamps: true, // יצירת שדות createdAt ו-updatedAt
     indexes: [
         {
             unique: true,
-            fields: ['packageCode']
-        }
-    ]
+            fields: ['packageCode'],
+        },
+        {
+            fields: ['status'], // אינדקס על status
+        },
+        {
+            fields: ['name'], // אינדקס על name לחיפושים
+        },
+    ],
 });
 
 module.exports = Package;
